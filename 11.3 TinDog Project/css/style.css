@@ -33,3 +33,7 @@
 .title-image {
   padding-top: 5px;
 }
+.py-5 {
+  padding-bottom:0!important;
+}
+
