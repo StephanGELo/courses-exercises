@@ -8,6 +8,13 @@ function playSound(name) {
   audio.play();
 }
 
+function animatePress(currentColor) {
+    $('#' + currentColor).addClass("pressed");
+    setTimeout(function(){
+      $('#' + currentColor).removeClass("pressed");
+    }, 100);
+}
+
 function nextSequence() {
   // generate a random number from 0 to 3
   var randomNumber = Math.floor(Math.random()*4);
@@ -25,5 +32,6 @@ function nextSequence() {
 $('.btn').click(function(){
   var userChosenColor = $(this).attr("id");
   playSound(userChosenColor);
+  animatePress(userChosenColor);
   userClickedPattern.push(userChosenColor);
 });

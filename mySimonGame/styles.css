@@ -9,7 +9,7 @@ body {
     font-family: 'Press Start 2p', cursive;
     margin: 5%;
     color:azure;
-}
+}s
 
 .container {
     display: block;
@@ -33,7 +33,7 @@ body {
 .red {
     background-color: red;
 }
-  
+
 .yellow {
     background-color: yellow;
 }
@@ -42,3 +42,7 @@ body {
     background-color: blue;
 }
 
+.pressed {
+  box-shadow: 0 0 20px white;
+  background-color: grey;
+}
