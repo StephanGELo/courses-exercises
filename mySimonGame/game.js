@@ -4,6 +4,25 @@ var userClickedPattern = [];
 var hasGamestarted = false;
 var level = 0;
 
+//Check the user's answer against the game pattern.
+function checkAnswer(currentLevel) {
+  if(gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+    if(gamePattern.length === userClickedPattern.length) {
+      // call next sequence after a 1000ms delay
+      setTimeout(function(){
+        nextSequence();
+      }, 1000);
+    }
+  } else {
+    playSound('wrong');
+    $('body').addClass("game-over")
+    setTimeout(function(){
+      $('body').removeClass("game-over");
+    }, 200);
+    $('h1').text("Game Over, Press Any Key to Restart");
+  }
+}
+
 // Detect when a key is pressed to start the game
   $(document).keydown(function() {
     if(!hasGamestarted){
@@ -12,7 +31,7 @@ var level = 0;
       hasGamestarted = true;
     }
   });
-  
+
 function playSound(name) {
   //Play the audio corresponding to the randomChosenColor
   var audio = new Audio('./sounds/' + name + '.mp3');
@@ -28,6 +47,8 @@ function animatePress(currentColor) {
 }
 
 function nextSequence() {
+  userClickedPattern = [];
+  level += 1;
   // generate a random number from 0 to 3
   var randomNumber = Math.floor(Math.random()*4);
   //Select the button with the same color as randomChosenColor
@@ -38,7 +59,6 @@ function nextSequence() {
   //Flash the button of the randomChosenColor
   $(id).fadeIn(100).fadeOut(100).fadeIn(100);
   playSound(randomChosenColor);
-  level += 1;
   $('.level-title').text("Level " + level);
 }
 
@@ -48,4 +68,5 @@ $('.btn').click(function(){
   playSound(userChosenColor);
   animatePress(userChosenColor);
   userClickedPattern.push(userChosenColor);
+  checkAnswer(userClickedPattern.length - 1);
 });

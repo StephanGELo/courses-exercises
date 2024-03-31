@@ -9,7 +9,7 @@ body {
     font-family: 'Press Start 2p', cursive;
     margin: 5%;
     color:azure;
-}s
+}
 
 .container {
     display: block;
@@ -45,4 +45,9 @@ body {
 .pressed {
   box-shadow: 0 0 20px white;
   background-color: grey;
+}
+
+.game-over {
+  background-color: red;
+  opacity: 0.8;
 }
