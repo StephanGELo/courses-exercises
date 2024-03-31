@@ -1,13 +1,25 @@
 var buttonColors = ['red', 'blue', 'green', 'yellow'];
 var gamePattern = [];
 var userClickedPattern = [];
+var hasGamestarted = false;
+var level = 0;
 
+// Detect when a key is pressed to start the game
+  $(document).keydown(function() {
+    if(!hasGamestarted){
+      nextSequence();
+      $('.level-title').text("Level " + level);
+      hasGamestarted = true;
+    }
+  });
+  
 function playSound(name) {
   //Play the audio corresponding to the randomChosenColor
   var audio = new Audio('./sounds/' + name + '.mp3');
   audio.play();
 }
 
+//Animate button when clicked and remove animation after 100ms
 function animatePress(currentColor) {
     $('#' + currentColor).addClass("pressed");
     setTimeout(function(){
@@ -26,6 +38,8 @@ function nextSequence() {
   //Flash the button of the randomChosenColor
   $(id).fadeIn(100).fadeOut(100).fadeIn(100);
   playSound(randomChosenColor);
+  level += 1;
+  $('.level-title').text("Level " + level);
 }
 
 //Create user clicked pattern
