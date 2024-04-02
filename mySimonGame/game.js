@@ -4,6 +4,12 @@ var userClickedPattern = [];
 var hasGamestarted = false;
 var level = 0;
 
+function startOver() {
+  gamePattern = [];
+  level = 0;
+  hasGamestarted = false;
+}
+
 //Check the user's answer against the game pattern.
 function checkAnswer(currentLevel) {
   if(gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
@@ -20,6 +26,7 @@ function checkAnswer(currentLevel) {
       $('body').removeClass("game-over");
     }, 200);
     $('h1').text("Game Over, Press Any Key to Restart");
+    startOver();
   }
 }
 
