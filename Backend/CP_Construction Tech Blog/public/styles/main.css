@@ -1,7 +1,9 @@
-body {
-    background-color: blue;
-}
-h1 {
-    color: red;
-    font-size: 3.5rem;
+/* body {
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui,
+    helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+} */
+
+.text-body-emphasis {
+    --bs-text-opacity: 1;
+    color: blue !important;
 }
