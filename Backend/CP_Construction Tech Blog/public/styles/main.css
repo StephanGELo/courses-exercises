@@ -10,7 +10,7 @@ body {
 .card-header {
     border-bottom: none !important;
     margin: auto;
-    width: 80%;
+    width: 80%; 
 }
 
 .card-category {
