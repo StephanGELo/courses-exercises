@@ -15,26 +15,19 @@
     <button type="submit" value="fish" name="choice">🐟</button>
   </form>
   <div id="recipeContainer" class="hidden">
-
-    <!-- If no recipe yet, show: -->
-    <% if (!locals.recipeName && !locals.ingredients) { %>
-      <h2>Pick your favourite taco ingredient 👆</h2>
-    <% } else { %>
-      <!-- Else, show the recame e.g. <h2>Recipe name</h2>-->
-      <h2><%= recipeName %></h2>
-      <h3>Ingredients:</h3>
+    <% if(locals.recipe) {%>
+      <h2 id="recipeTitle"><%= recipe.name %></h2>
+      <h3>Ingredients: </h3>
       <ul id="ingredientsList">
-        <li><%= ingredients.protein.name %> , <%= ingredients.protein.preparation %></li>
-        <li><%= ingredients.salsa.name %></li>
-        <% for(var i=0; i < ingredients.toppings.length; i++) { %>
-        <li><%= ingredients.toppings[i].quantity %> of <%= ingredients.toppings[i].name %></li>
-        <% } %>
+        <li><%= recipe.ingredients.protein.name %> , <%= recipe.ingredients.protein.preparation %></li>
+        <li><%= recipe.ingredients.salsa.name %></li>
+          <% recipe.ingredients.toppings.forEach(topping => { %>
+        <li><%= topping.quantity %> of <%= topping.name %></li>
+        <% }) %>
       </ul>
+    <% } else {%>
+      <h2>Pick your favourite taco ingredient 👆</h2>
     <% } %>
-   
-
-
-
   </div>
 </body>
 
