@@ -15,10 +15,20 @@ app.get("/", (req, res) => {
   res.render("index.ejs", { content: "API Response." });
 });
 
-app.get("/noAuth", (req, res) => {
+app.get("/noAuth", async (req, res) => {
   //TODO 2: Use axios to hit up the /random endpoint
   //The data you get back should be sent to the ejs file as "content"
   //Hint: make sure you use JSON.stringify to turn the JS object from axios into a string.
+  try {
+    const response = await axios.get(`${API_URL}random`);
+    const result = response.data;
+    console.log(result);
+    const data = JSON.stringify(result);
+    res.render("index.ejs", {content : data});
+  } catch(error) {
+    console.log("Failed to make request : ", error.message );
+    res.render("index.ejs", { error: error.message });
+  }
 });
 
 app.get("/basicAuth", (req, res) => {
