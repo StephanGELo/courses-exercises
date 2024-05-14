@@ -1,3 +1,4 @@
+import 'dotenv/config'; // import dotenv npm package to access secrets from .env file
 import express from "express";
 import axios from "axios";
 
@@ -6,10 +7,10 @@ const port = 3001;
 const API_URL = "https://secrets-api.appbrewery.com/";
 
 //TODO 1: Fill in your values for the 3 types of auth.
-const yourUsername = "stephangelo";
-const yourPassword = "ReallyME";
-const yourAPIKey = "391a6e1b-86d5-4245-b5bf-4aae0e66d8c9";
-const yourBearerToken = "467ccabb-ff8a-4dd3-a04a-464b84a0f0fb";
+const yourUsername = `${process.env.USERNAME}`;
+const yourPassword = `${process.env.PASSWORD}`;
+const yourAPIKey = `${process.env.API_KEY}`;
+const yourBearerToken = `${process.env.BEARER_TOKEN}`;
 
 app.get("/", (req, res) => {
   res.render("index.ejs", { content: "API Response." });
@@ -22,7 +23,6 @@ app.get("/noAuth", async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}random`);
     const result = response.data;
-    console.log(result);
     const data = JSON.stringify(result);
     res.render("index.ejs", {content : data});
   } catch(error) {
@@ -31,7 +31,7 @@ app.get("/noAuth", async (req, res) => {
   }
 });
 
-app.get("/basicAuth", (req, res) => {
+app.get("/basicAuth", async (req, res) => {
   //TODO 3: Write your code here to hit up the /all endpoint
   //Specify that you only want the secrets from page 2
   //HINT: This is how you can use axios to do basic auth:
@@ -44,6 +44,19 @@ app.get("/basicAuth", (req, res) => {
       },
     });
   */
+    try {
+      const response = await axios.get( `${API_URL}all?page=2`, {
+        auth: {
+          username: `${yourUsername}`,
+          password: `${yourPassword}`
+        },
+      });
+      const result = JSON.stringify(response.data);
+      res.render("index.ejs", { content: result });
+    } catch (error) {
+      console.log("Failed to make request:", error.message);
+      res.render("index.ejs", { error: error.message });
+    }
 });
 
 app.get("/apiKey", (req, res) => {
