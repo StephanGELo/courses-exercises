@@ -42,18 +42,35 @@ app.post("/post-secret", async (req, res) => {
     res.render("index.ejs", { content: JSON.stringify(response.data) });
     } catch (error) {
     res.status(404);
-    res.send(error.message);
+    res.render("index.ejs", { content: JSON.stringify(error.response.data) });
   }
 });
 
 app.post("/put-secret", async (req, res) => {
   const searchId = req.body.id;
   // TODO 3: Use axios to PUT the data from req.body to the secrets api servers.
+  const body = req.body;
+  try {
+    const response = await axios.put(`${API_URL}` + "/secrets" + `/${searchId}`, body, config);
+    res.render("index.ejs", { content : JSON.stringify(response.data) });
+  } catch(error) {
+    res.status(404);
+    res.render("index.ejs", { content: JSON.stringify(error.response.data) });
+  }
 });
 
 app.post("/patch-secret", async (req, res) => {
   const searchId = req.body.id;
   // TODO 4: Use axios to PATCH the data from req.body to the secrets api servers.
+  const body = req.body;
+  try {
+    const response = await axios.patch(`${API_URL}` + "/secrets" + `/${searchId}`, body, config);
+    res.render("index.ejs", { content: JSON.stringify(response.data) });
+  } catch(error) {
+    res.status(404);
+    res.render("index.ejs", { content: JSON.stringify(error.response.data) });
+
+  }
 });
 
 app.post("/delete-secret", async (req, res) => {
