@@ -16,15 +16,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
   });
 //2. GET a specific joke
   app.get("/jokes/:id", (req, res) => {
-    let idValue = parseInt(req.params.id);
-    jokes.forEach((joke) => {
-      if ( idValue === joke.id) {
-        res.send(JSON.stringify(joke));
-      }
-    });
+    let id = parseInt(req.params.id);
+    // jokes.forEach((joke) => {
+    //   if ( idValue === joke.id) {
+    //     res.send(JSON.stringify(joke));
+    //   }
+    // });
+    const foundJoke = jokes.find((joke) => id === joke.id);
+    res.json(foundJoke);
   });
 
 //3. GET a jokes by filtering on the joke type
+app.get("/filter", (req, res) => {
+  const type = req.query.type;
+  // const foundTypes = [];
+  // jokes.forEach((joke) => {
+  //   if (type === joke.jokeType) {
+  //     foundTypes.push(joke);
+  //   }
+  // });
+  const filteredJokes = jokes.filter((joke) => joke.jokeType === type);
+  res.json(filteredJokes);
+});
 
 //4. POST a new joke
 
