@@ -8,23 +8,23 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
-  app.get("/random", (req, res) => {
-    let randomNumber = Math.floor(Math.random() * jokes.length);
-    let randomJoke = jokes[randomNumber];
-    res.send(JSON.stringify(randomJoke));
+app.get("/random", (req, res) => {
+  let randomNumber = Math.floor(Math.random() * jokes.length);
+  let randomJoke = jokes[randomNumber];
+  res.send(JSON.stringify(randomJoke));
 
-  });
+});
 //2. GET a specific joke
-  app.get("/jokes/:id", (req, res) => {
-    let id = parseInt(req.params.id);
-    // jokes.forEach((joke) => {
-    //   if ( idValue === joke.id) {
-    //     res.send(JSON.stringify(joke));
-    //   }
-    // });
-    const foundJoke = jokes.find((joke) => id === joke.id);
-    res.json(foundJoke);
-  });
+app.get("/jokes/:id", (req, res) => {
+  let id = parseInt(req.params.id);
+  // jokes.forEach((joke) => {
+  //   if ( idValue === joke.id) {
+  //     res.send(JSON.stringify(joke));
+  //   }
+  // });
+  const foundJoke = jokes.find((joke) => id === joke.id);
+  res.json(foundJoke);
+});
 
 //3. GET a jokes by filtering on the joke type
 app.get("/filter", (req, res) => {
@@ -77,8 +77,41 @@ app.patch("/jokes/:id", (req, res) => {
   res.json(jokes[searchIndex]);
 });
 //7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const searchIndex = jokes.findIndex((joke) => joke.id === id);
+  if (searchIndex > -1) {
+    const existingJoke = jokes[searchIndex];
+    console.log("Exisitng joke: ", existingJoke);
+    const deletedJoke = jokes.splice(searchIndex, 1);
+    console.log("Deleted joke: ", deletedJoke);
+    res.json(deletedJoke);
+  } else {
+    res
+        .status(404)   
+        .json({error : `Joke with ${id} could not be found. No joke was deleted.`});
+  }
+});
 
 //8. DELETE All jokes
+app.delete("/all", (req, res) => {
+  const userKey = req.query.key;
+  if(userKey === masterKey) {
+    const deletedJokes = jokes;
+    console.log(deletedJokes);
+    jokes.length = 0;
+    if(jokes.length === 0) {
+      res.sendStatus(200);
+      jokes = deletedJokes;
+    } else {
+      res
+        .status(404)   
+        .json({error : `All Jokes could not be deleted. Try again.`});
+    }
+  }
+
+
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
