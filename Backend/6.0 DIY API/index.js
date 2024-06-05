@@ -55,6 +55,14 @@ app.post("/jokes", (req, res) => {
 });
 
 //5. PUT a joke
+// Replace the values of all the keys. The id stays the same.
+app.put("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const searchIndex = jokes.findIndex((joke) => joke.id === id);
+  jokes[searchIndex].jokeText = req.body.text;
+  jokes[searchIndex].jokeType = req.body.type;
+  res.json(jokes[searchIndex]);
+});
 
 //6. PATCH a joke
 
