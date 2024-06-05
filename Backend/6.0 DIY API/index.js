@@ -98,7 +98,6 @@ app.delete("/all", (req, res) => {
   const userKey = req.query.key;
   if(userKey === masterKey) {
     const deletedJokes = jokes;
-    console.log(deletedJokes);
     jokes.length = 0;
     if(jokes.length === 0) {
       res.sendStatus(200);
@@ -106,7 +105,7 @@ app.delete("/all", (req, res) => {
     } else {
       res
         .status(404)   
-        .json({error : `All Jokes could not be deleted. Try again.`});
+        .json({ error: `You are not authorised to perform this action.` });
     }
   }
 
