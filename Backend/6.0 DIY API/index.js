@@ -40,6 +40,19 @@ app.get("/filter", (req, res) => {
 });
 
 //4. POST a new joke
+app.post("/jokes", (req, res) => {
+  const newJoke = {
+    id : 0,
+    jokeText : "",
+    jokeType : ""
+  };
+  newJoke.id = jokes.length + 1;
+  newJoke.jokeText = req.body.text;
+  newJoke.jokeType = req.body.type;
+  jokes.push(newJoke);
+  console.log(jokes.slice(-1));
+  res.json(newJoke);
+});
 
 //5. PUT a joke
 
