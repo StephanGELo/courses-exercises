@@ -27,14 +27,29 @@ const checkVisitedCountries = (countries) =>{
     };
   });
   return visited;
-}
+};
+
+const checkAddedCountry = async (country) => {
+  if (country) {
+   const result = await db.query("SELECT country_code FROM countries WHERE country_name= $1", [`${country}`]);
+   return result.rows[0].country_code;
+  }
+};
 
 app.get("/", async (req, res) => {
-  //Write your code here.
   const result = await db.query("SELECT * FROM visited_countries");
   const visitedCountries = checkVisitedCountries(result.rows);
-  console.log(visitedCountries);
   res.render("index.ejs", {countries: visitedCountries, total: visitedCountries.length});
+});
+
+app.post("/add", async (req, res) => {
+  const addedCountryCode = await checkAddedCountry(req.body.country);
+
+  await db.query("INSERT INTO visited_countries (country_code) VALUES ($1)", [
+    addedCountryCode
+  ]);
+
+  res.redirect("/");
 });
 
 app.listen(port, () => {
