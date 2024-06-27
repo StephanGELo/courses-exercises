@@ -49,8 +49,9 @@ app.post("/add", async (req, res) => {
 
   try {
     const result = await db.query(
-      "SELECT country_code from countries WHERE country_name=$1", 
-      [addedCountry]
+      // Change country name in db and in query to lower case and find a match as long as part of country name is searched
+      "SELECT country_code from countries WHERE LOWER(country_name) LIKE '%' || $1 || '%' ", 
+      [addedCountry.toLowerCase()]
     );
     // check whether country code exists in visited countries table
     if (!checkCountryDoubleEntry(countries, result.rows[0].country_code)) {
