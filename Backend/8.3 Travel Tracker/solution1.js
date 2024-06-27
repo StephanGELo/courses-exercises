@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
@@ -8,7 +9,7 @@ const port = 3000;
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
-  database: "world",
+  database: `${process.env.DB_DATABASE}`,
   password: `${process.env.DB_PASSWORD}`,
   port: 5432,
 });
@@ -24,9 +25,9 @@ app.get("/", async (req, res) => {
   result.rows.forEach((country) => {
     countries.push(country.country_code);
   });
-  console.log(result.rows);
+  console.log("In Solution1, line 28: ", result.rows);
   res.render("index.ejs", { countries: countries, total: countries.length });
-  db.end();
+  // db.end();
 });
 
 app.listen(port, () => {
