@@ -19,37 +19,65 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const checkVisitedCountries = (countries) =>{
-  const visited = [];
-  countries.forEach((country) => {
-    if(country) {
-      visited.push(country.country_code);
-    };
-  });
-  return visited;
-};
+// Helper functions
 
-const checkAddedCountry = async (country) => {
-  if (country) {
-   const result = await db.query("SELECT country_code FROM countries WHERE country_name= $1", [`${country}`]);
-   return result.rows[0].country_code;
-  }
-};
-
-app.get("/", async (req, res) => {
+const getVisitedCountries = async () => {
   const result = await db.query("SELECT * FROM visited_countries");
-  const visitedCountries = checkVisitedCountries(result.rows);
+  let visitedCountries = [];
+  if (result) {
+    result.rows.forEach((country) =>{
+      visitedCountries.push(country.country_code);
+    });
+  }
+  return visitedCountries;
+};
+
+const checkCountryDoubleEntry = (countries, countryCode) => 
+  countries.filter(code => code === countryCode).length > 0;
+
+// GET Home page
+app.get("/", async (req, res) => {
+  const visitedCountries = await getVisitedCountries();
   res.render("index.ejs", {countries: visitedCountries, total: visitedCountries.length});
 });
 
+// INSERT new visited country
 app.post("/add", async (req, res) => {
-  const addedCountryCode = await checkAddedCountry(req.body.country);
+  const addedCountry = req.body.country;
+  let countryCode = "";
+  const countries = await getVisitedCountries();
 
-  await db.query("INSERT INTO visited_countries (country_code) VALUES ($1)", [
-    addedCountryCode
-  ]);
-
-  res.redirect("/");
+  try {
+    const result = await db.query(
+      "SELECT country_code from countries WHERE country_name=$1", 
+      [addedCountry]
+    );
+    // check whether country code exists in visited countries table
+    if (!checkCountryDoubleEntry(countries, result.rows[0].country_code)) {
+      countryCode = result.rows[0].country_code;
+    }
+    try {
+      await db.query(
+        "INSERT INTO visited_countries (country_code) VALUES($1)",
+        [countryCode]
+      );
+      res.redirect("/");
+    }catch (err) {
+      console.log(err);
+      res.render("index.ejs", {
+        countries: countries,
+        total: countries.length,
+        error: "Country has already been added, try again."
+      });
+    };
+  } catch(err) {
+    console.log(err);
+    res.render("index.ejs", {
+      countries: countries,
+      total: countries.length,
+      error: "Country name does not exist, try again."
+    });
+  };
 });
 
 app.listen(port, () => {
