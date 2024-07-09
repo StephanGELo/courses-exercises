@@ -117,4 +117,4 @@ VALUES ('FR', 1), ('GB', 1), ('CA', 2), ('FR', 2 );
 SELECT *
 FROM visited_countries
 JOIN users
-ON users.id = user_id;
+ON user_id = users.id;
