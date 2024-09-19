@@ -6,19 +6,19 @@ function App() {
   
 
   function handleChange(event) {
-    const newValue = event.target.value;
-    const inputName = event.target.name;
+    // Use of ES6 to destructure event.target object to access value and name
+    const { value, name } = event.target;
 
     setFullName((prevValue) => {
-      if (inputName === "fName") {
+      if (name === "fName") {
        return {
-          fName: newValue,
+          fName: value,
           lName: prevValue.lName
         }
-      } else if (inputName === "lName") {
+      } else if (name === "lName") {
         return {
           fName: prevValue.fName,
-          lName: newValue
+          lName: value
         }
       }
     });
